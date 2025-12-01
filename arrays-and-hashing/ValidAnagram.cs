@@ -15,20 +15,19 @@ bool IsAnagram(string s, string t)
         }
     }
 
-    var tDict = new Dictionary<char, int>();
     foreach(var c in t)
     {
-        if(tDict.ContainsKey(c))
+        if(sDict.ContainsKey(c))
         {
-            tDict[c]++;
+            sDict[c]--;
         }
         else
         {
-            tDict[c] = 1;
+            return false;
         }
     }
 
-    return (sDict.Count == tDict.Count) && !sDict.Except(tDict).Any();
+    return sDict.All((kv) => kv.Value == 0);
 }
 
 Debug.Assert(IsAnagram("racecar", "carrace"));
