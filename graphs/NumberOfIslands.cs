@@ -25,7 +25,7 @@ public class Solution {
         public NumIslandsSolver(char[][] grid)
         {
             this.grid = grid;
-            visited = new HashSet<Tuple<int, int>>();
+            this.visited = new HashSet<Tuple<int, int>>();
         }
 
         public int SolveIsland()
@@ -36,18 +36,14 @@ public class Solution {
             {
                 for(int j = 0; j < grid[i].Length; j++)
                 {
-                    // make sure to handle bounds handling
+                    if(grid[i][j] != '1') continue;
+
                     var currLoc = new Tuple<int,int>(j, i);
                     if(visited.Contains(currLoc)) continue; 
-                    if(grid[i][j] == '0')
-                    {
-                        visited.Add(currLoc);
-                        continue;
-                    }
 
                     // we are at a new location that hasn't been hit before.
                     // we have a new island to add to our visited list. 
-                    addPositionsToVisted(currLoc);
+                    DFS_MarkIslandAsVisited(currLoc);
                     numIslands++;
                 }
             }
@@ -55,24 +51,22 @@ public class Solution {
             return numIslands;
         }
 
-        private bool addPositionsToVisted(Tuple<int,int> pos)
+        private void DFS_MarkIslandAsVisited(Tuple<int,int> pos)
         {
-            if(visited.Contains(pos)) return false;
+            if(visited.Contains(pos) || grid[pos.Item2][pos.Item1] == '0') return;
             visited.Add(pos);
-
-            if(grid[pos.Item2][pos.Item1] == '0') return false;
 
             var left = new Tuple<int,int>(pos.Item1 - 1, pos.Item2);
             var right = new Tuple<int,int>(pos.Item1 + 1, pos.Item2);
             var up = new Tuple<int,int>(pos.Item1, pos.Item2 - 1);
             var down = new Tuple<int,int>(pos.Item1, pos.Item2 + 1);
 
-            if(left.Item1 >= 0) addPositionsToVisted(left);
-            if(right.Item1 < this.grid[right.Item2].Length) addPositionsToVisted(right);
-            if(up.Item2 >= 0) addPositionsToVisted(up);
-            if(down.Item2 < this.grid.Length) addPositionsToVisted(down);
+            if(left.Item1 >= 0) DFS_MarkIslandAsVisited(left);
+            if(right.Item1 < this.grid[right.Item2].Length) DFS_MarkIslandAsVisited(right);
+            if(up.Item2 >= 0) DFS_MarkIslandAsVisited(up);
+            if(down.Item2 < this.grid.Length) DFS_MarkIslandAsVisited(down);
 
-            return true;
+            return;
         }
     }
     public int NumIslands(char[][] grid)
