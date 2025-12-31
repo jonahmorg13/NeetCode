@@ -50,7 +50,13 @@ public class WordDictionary {
         while(idx < word.Length)
         {
             if(word[idx] == '.')
-                return currNode.children.Any(kvp => RecursiveSearch(word, kvp.Value, idx + 1));
+            {
+                foreach(var node in currNode.children)
+                    if(RecursiveSearch(word, node.Value, idx + 1))
+                        return true;
+
+                return false;
+            }
 
             if(!currNode.children.ContainsKey(word[idx]))
             {
