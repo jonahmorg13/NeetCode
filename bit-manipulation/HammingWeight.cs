@@ -1,0 +1,17 @@
+using System.Diagnostics;
+
+var sol = new Solution();
+var res = sol.HammingWeight(23);
+Debug.Assert(res == 4);
+
+public class Solution {
+    public int HammingWeight(uint n) {
+        int res = 0;
+        for(int i = 0; i < 32; i++)
+        {
+            if((n & 1) == 1) res++;
+            n = n >> 1;
+        }
+        return res;
+    }
+}
