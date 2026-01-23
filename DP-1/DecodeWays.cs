@@ -18,7 +18,7 @@ public class Solution {
             if(i < s.Length - 1)
             {
                 if(s[i] == '1' ||
-                (s[i] == '2' && s[i + 1] == '7'))
+                (s[i] == '2' && s[i + 1] < '7'))
                 {
                     res += Dfs(i + 2);
                 }
