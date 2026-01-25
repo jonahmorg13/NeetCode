@@ -2,11 +2,13 @@
 using System.Diagnostics;
 
 var sol = new Solution();
+var resThree = sol.WordBreak("catsincars", ["cats","cat","sin","in","car"]);
+var resTwo = sol.WordBreak("aaaaaaa", ["aaaa", "aaa"]);
 var res = sol.WordBreak("neetcode", ["neet", "code"]);
 
-var resTwo = sol.WordBreak("aaaaaaa", ["aaaa", "aaa"]);
-Debug.Assert(res == true);
+Debug.Assert(resThree == false);
 Debug.Assert(resTwo == true);
+Debug.Assert(res == true);
 
 public class Solution
 {
@@ -15,32 +17,28 @@ public class Solution
     // how does that coin change algorithm actually work?
     public bool WordBreak(string s, List<string> wordDict)
     {
-        var wordSet = new HashSet<string>(wordDict);
-        int maxLen = 0;
-        foreach(var word in wordDict)
-            maxLen = Math.Max(maxLen, word.Length);
-
-        return dfs(s, 0, wordDict, maxLen, wordSet);
+        var cache = new Dictionary<string, bool>();
+        return dfs(s, wordDict, cache);
     }
 
-    private bool dfs(string s, int start, List<string> wordDict, int maxLen, HashSet<string> wordSet)
+    private bool dfs(string s, List<string> wordDict, Dictionary<string, bool> cache)
     {
-        if(start >= s.Length) return true;
+        if(s.Length <= 0) return true;
+        if(cache.ContainsKey(s)) return cache[s];
 
-        int end = start;
-        while(end < s.Length)
+        var res = false;
+        foreach(var word in wordDict)
         {
-            var currStr = s.Substring(start, end - start + 1);
-            if(currStr.Length > maxLen)
-                return false;
-
-            if(wordDict.Contains(currStr))
-                if(dfs(s, end + 1, wordDict, maxLen, wordSet) == true)
-                    return true;
-
-            end++;
+            var currStrIdx = s.IndexOf(word);
+            if(currStrIdx == 0)
+            {
+                var newStr = s.Substring(word.Length);
+                if(res == false)
+                    res = dfs(newStr, wordDict, cache);
+            }
         }
 
-        return false;
+        cache[s] = res;
+        return res;
     }
 }
