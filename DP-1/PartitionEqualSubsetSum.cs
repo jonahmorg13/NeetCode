@@ -10,6 +10,7 @@ public class Solution {
         return dfs(nums, 0, 0, 0);
     }
 
+    //todo: do this as an iterative bottom up approach instead of a top down approach
     private bool dfs(int[] nums, int i, int leftSum, int rightSum)
     {
         if(i >= nums.Length)
