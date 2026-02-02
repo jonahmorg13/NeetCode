@@ -10,6 +10,7 @@ for(int i = 0; i < res.Count; i++)
 }
 
 public class Solution {
+    //todo: do this the 'swap' way in the future
     public List<List<int>> Permute(int[] nums)
     {
         var sol = new List<List<int>>();
