@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Text;
 
 var sol = new Solution();
 var res = sol.LetterCombinations("34");
@@ -25,19 +26,18 @@ public class Solution {
     };
 
     public List<string> LetterCombinations(string digits) {
-        if(string.IsNullOrWhiteSpace(digits)) return null;
-
         var sol = new List<string>();
-        var currStr = string.Empty; 
+        if(string.IsNullOrWhiteSpace(digits)) return sol;
+        var currStr = new StringBuilder();
         dfs(digits, 0, currStr, sol);
         return sol;
     }
 
-    private void dfs(string digits, int i, string currStr, List<string> sol)
+    private void dfs(string digits, int i, StringBuilder currStr, List<string> sol)
     {
         if(i == digits.Length)
         {
-            sol.Add(new string(currStr));
+            sol.Add(currStr.ToString());
             return;
         }
 
@@ -45,9 +45,9 @@ public class Solution {
         var currChars = digitsToChars[currDigit];
         for(int j = 0; j < currChars.Length; j++)
         {
-            currStr += currChars[j];
+            currStr.Append(currChars[j]);
             dfs(digits, i + 1, currStr, sol);
-            currStr = currStr.Substring(0, currStr.Length - 1);
+            currStr.Length--;
         }
     }
 }
