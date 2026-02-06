@@ -12,7 +12,7 @@ public class Solution {
     public bool IsHappy(int n) {
         var seen = new HashSet<int>();
         var currNum = n;
-        while(currNum != 1)
+        while(!seen.Contains(currNum))
         {
             int currAns = 0;
             while(currNum > 0)
@@ -20,11 +20,10 @@ public class Solution {
                 currAns += (int)Math.Pow(currNum % 10, 2);
                 currNum /= 10;
             }
+            seen.Add(currAns);
             currNum = currAns;
             if(currAns == 1) return true;
-            if(seen.Contains(currAns)) return false;
-            seen.Add(currAns);
         }
-        return true;
+        return false;
     }
 }
