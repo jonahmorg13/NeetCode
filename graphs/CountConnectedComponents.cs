@@ -31,20 +31,14 @@ public class Solution {
 
         // main function, run a dfs on it!
         var visitedAmts = new int[n];
-        i = 0;
         int res = 0;
-        while(true)
+        for(i = 0; i < n; i++)
         {
-            res++;
-            dfs(-1, i, visitedAmts, edgeDict);
-            int j;
-            for(j = 0; j < visitedAmts.Length && visitedAmts[j] != 0; j++) {}
-            if(j >= visitedAmts.Length)
-                break;
-            if(j == i)
-                i++;
-            else 
-                i = j;
+            if(visitedAmts[i] == 0)
+            {
+                res++;
+                dfs(-1, i, visitedAmts, edgeDict);
+            }
         }
         
         return res;
