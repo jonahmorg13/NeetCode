@@ -7,22 +7,14 @@ res = sol.CanJump([1,2,1,0,1]);
 Debug.Assert(res == false);
 
 public class Solution {
-    public bool CanJump(int[] nums) {
-        return recursiveJumpGame(nums, 0);        
-    }
-
-    private bool recursiveJumpGame(int[] nums, int i)
+    public bool CanJump(int[] nums)
     {
-        if(i >= nums.Length - 1)
-            return true;
+        int goal = nums.Length - 1;
 
-        int currNum = nums[i];
-        if(currNum == 0)
-            return false;
+        for(int i = nums.Length - 2; i >= 0; i--)
+            if(i + nums[i] >= goal)
+                goal = i;
 
-        for(int j = currNum; j >= 1; j--)
-            if(recursiveJumpGame(nums, i + j)) return true;
-
-        return false;
+        return goal == 0;
     }
 }
