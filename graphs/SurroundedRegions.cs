@@ -4,54 +4,35 @@ public class Solution
 {
     public void Solve(char[][] board)
     {
-        // loop through each x and y position until we find a char 'O'
-        // when we find that 'O', we will start a dfs!
-        // inside this dfs, we will keep track if we've hit a border or that has an 'O'. 
-        // if we do, then we know we can't remove any of the O's seen, we must do an early return
-        // we will need to keep a visited hashset to short circuit the dfs
-        // after a dfs, if we didnt hit a 'O' on the border, then we know we can change each of those positions!
-        int y_amt = board.Length;
-        int x_amt = board[0].Length;
-        for(int y = 0; y < y_amt; y++) {
-            for(int x = 0; x < x_amt; x++) {
-                // <int, int> -> x, y
-                if(board[y][x] == 'X') continue;
-                var surroundedTileLocations = new HashSet<Tuple<int, int>>();
-                var visited = new HashSet<Tuple<int, int>>();
-                if(dfs(board, x, y, surroundedTileLocations, x_amt, y_amt, visited)) {
-                    // go through each surrounded tile location and change it
-                    foreach(var tile in surroundedTileLocations)
-                        board[tile.Item2][tile.Item1] = 'X';
-                }
-            }
+        int rows = board.Length;
+        int cols = board[0].Length;
+
+        for (int r = 0; r < rows; r++)
+        {
+            if (board[r][0] == 'O') Dfs(board, r, 0, rows, cols);
+            if (board[r][cols - 1] == 'O') Dfs(board, r, cols - 1, rows, cols);
         }
-    }
-
-    private bool dfs(char[][] board, int currX, int currY, HashSet<Tuple<int,int>> tiles, int sizeX, int sizeY, HashSet<Tuple<int,int>> visited) {
-        var currLoc = new Tuple<int, int>(currX, currY);
-        if(visited.Contains(currLoc)) return true;
-        visited.Add(currLoc);
-
-        // base case 1
-        if(currX == sizeX - 1 || currX == 0 || currY == sizeY - 1 || currY == 0) {
-            if(board[currY][currX] == 'O') return false;
-            tiles.Add(currLoc);
-            return true;
+        for (int c = 0; c < cols; c++)
+        {
+            if (board[0][c] == 'O') Dfs(board, 0, c, rows, cols);
+            if (board[rows - 1][c] == 'O') Dfs(board, rows - 1, c, rows, cols);
         }
 
-        // base case 2
-        if(board[currY][currX] == 'X') return true;
-        tiles.Add(currLoc);
-
-        // we must do the four directions here
-        if(!dfs(board, currX - 1, currY, tiles, sizeX, sizeY, visited)) return false;
-        if(!dfs(board, currX + 1, currY, tiles, sizeX, sizeY, visited)) return false;
-        if(!dfs(board, currX, currY - 1, tiles, sizeX, sizeY, visited)) return false;
-        if(!dfs(board, currX, currY + 1, tiles, sizeX, sizeY, visited)) return false;
-
-        return true;
+        for (int r = 0; r < rows; r++)
+            for (int c = 0; c < cols; c++)
+                if (board[r][c] == 'O') board[r][c] = 'X';
+                else if (board[r][c] == 'S') board[r][c] = 'O';
     }
 
+    private void Dfs(char[][] board, int r, int c, int rows, int cols)
+    {
+        if (r < 0 || r >= rows || c < 0 || c >= cols || board[r][c] != 'O') return;
+        board[r][c] = 'S';
+        Dfs(board, r + 1, c, rows, cols);
+        Dfs(board, r - 1, c, rows, cols);
+        Dfs(board, r, c + 1, rows, cols);
+        Dfs(board, r, c - 1, rows, cols);
+    }
 }
 
 public class SurroundedRegionsTests
