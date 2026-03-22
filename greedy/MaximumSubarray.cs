@@ -10,16 +10,17 @@ public class Solution
 {
     public int MaxSubArray(int[] nums)
     {
-        int res = Int32.MinValue;
-        for(int i = 0; i < nums.Length; i++)
+        int maxSub = nums[0];
+        int currSum = 0;
+
+        foreach(var num in nums)
         {
-            var currSubArray = 0;
-            for(int j = i; j < nums.Length; j++)
-            {
-                currSubArray += nums[j];
-                res = Math.Max(res, currSubArray);
-            }
+            if(currSum < 0)
+                currSum = 0;
+            currSum += num;
+            maxSub = Math.Max(maxSub, currSum);
         }
-        return res;
+
+        return maxSub;
     }
 }
